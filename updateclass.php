@@ -29,16 +29,16 @@ if (!empty($_FILES['logoInput']['name'])) {
 }
 
 $sql = "UPDATE classes SET
-course='$course',
-lesson='$lesson',
-building='$building',
-floor='$floor',
-room='$room',
-status='$status',
-term='$term',
-class_time='$class_time',
-image_logo='$image_logo'
-WHERE id='$id'";
+    course='$course',
+    lesson='$lesson',
+    building='$building',
+    floor='$floor',
+    room='$room',
+    status='$status',
+    term='$term',
+    class_time='$class_time',
+    image_logo='$image_logo'
+    WHERE id='$id'";
 
 if ($conn->query($sql)) {
 
