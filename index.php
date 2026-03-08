@@ -1,291 +1,294 @@
+<?php
+include "db.php";
+
+
+?>
 <!DOCTYPE html>
 <html>
 
 <head>
-
     <title>Classes</title>
-
     <link rel="stylesheet" href="style.css">
-
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
 </head>
 
 <body>
-
-
     <div class="header">
-
         <h1>My Class</h1>
-
         <div class="">
-
             <button class="add-btn">+ Add Class</button>
-
         </div>
-
     </div>
+    <div class="grid" id="card">
+        <!-- data- -->
+        <?php
+        $result = $conn->query("SELECT * FROM classes");
+        while ($row = $result->fetch_assoc()):
+        ?>
 
-
-    <div class="grid">
-
-        <?php foreach ($classes as $c) { ?>
-
-            <div class="card">
-
-                <div class="card-header">
-
-                    <div class="course-box">
-
-                        <div class="logo">
-                            <img src="<?php echo $c['logo']; ?>">
-                        </div>
-
-                        <div>
-
-                            <div><?php echo $c['course']; ?></div>
-                            <div class="cid">Class ID: <?php echo $c['id']; ?></div>
-
-                        </div>
-
+        <div class="card" id="row-<?= $row['id'] ?>" data-id="<?= $row['id'] ?>" data-course="<?= $row['course'] ?>"
+            data-lesson="<?= $row['lesson'] ?>" data-status="<?= $row['status'] ?>"
+            data-building="<?= $row['building'] ?>" data-floor="<?= $row['floor'] ?>" data-room="<?= $row['room'] ?>"
+            data-term="<?= $row['term'] ?>" data-class_time="<?= $row['class_time'] ?>"
+            data-image_logo="<?= $row['image_logo'] ?>" data-created_at="<?= $row['created_at'] ?>">
+            <div class="card-header">
+                <div class="course-box">
+                    <div class="logo">
+                        <img style=" width: 42px; height: 42px; border-radius: 50%;"
+                            src="upload/<?= $row['image_logo'] ?>">
                     </div>
-
-                    <div class="menu">⋮</div>
-
+                    <div>
+                        <div>
+                            <p><?= $row['course'] ?></p>
+                        </div>
+                        <div class="cid"><?= $row['id'] ?></div>
+                    </div>
                 </div>
-
-                <div class="dropdown">
-
-                    <div>Edit</div>
-                    <div class="end">End Class</div>
-
-                </div>
-
-                <div class="card-body" style="margin-top: 15px;">
-
-                    <div class="row" ><span>Lesson</span><span><?php echo $c['lesson']; ?></span></div><hr>
-                    <div class="row" style="margin-top: 15px;"><span>Building</span><span><?php echo $c['building']; ?></span></div><hr>
-                    <div class="row" style="margin-top: 15px;"><span>Room</span><span><?php echo $c['room']; ?></span></div><hr>
-                    <div class="row"style="margin-top: 15px;"><span>Status</span><span><?php echo $c['status']; ?></span></div><hr>
-                    <div class="row"style="margin-top: 15px;"><span>Term</span><span><?php echo $c['term']; ?></span></div><hr>
-                    <div class="row"style="margin-top: 15px;"><span>Time</span><span><?php echo $c['time']; ?></span></div>< sthr>
-
-                </div>
-
-                <div class="view-btn">View Class</div>
-
+                <div class="menu">⋮</div>
             </div>
 
-        <?php } ?>
+            <div class="dropdown">
+                <div>Edit</div>
+                <div class="end">End Class</div>
+            </div>
 
+            <div class="card-body" style="margin-top: 15px;">
+                <div class="row"><span>Lesson</span><span><?= $row['lesson'] ?></span></div>
+                <hr>
+                <div class="row" style="margin-top: 15px;">
+                    <span>Building</span><span><?= $row['building'] ?></span>
+                </div>
+                <hr>
+                <div class="row" style="margin-top: 15px;"><span>Floor</span><span><?= $row['floor'] ?></span></div>
+                <hr>
+                <div class="row" style="margin-top: 15px;"><span>Room</span><span><?= $row['room'] ?></span></div>
+                <hr>
+                <div class="row" style="margin-top: 15px;"><span>Status</span><span><?= $row['status'] ?></span>
+                </div>
+                <hr>
+                <div class="row" style="margin-top: 15px;"><span>Term</span><span><?= $row['term'] ?></span></div>
+                <hr>
+                <div class="row" style="margin-top: 15px;"><span>Time</span><span><?= $row['class_time'] ?></span></div>
+            </div>
+            <div class="view-btn">View Class</div>
+        </div>
+        <?php endwhile; ?>
     </div>
-
 
 
     <!-- MODAL -->
-
-    <div class="modal" id="modal">
-
-        <div class="modal-box">
-
-            <div class="modal-header">
-
-                <h2>Create Class</h2>
-
-                <div class="close">✕</div>
-
-            </div>
-
-
-            <div class="modal-body">
-
-                <form id="classForm">
-
-                    <div class="grid-form">
-
-
-                        <div class="icon-box">
-
-                            <label>CLASS ICON</label>
-
-                            <label class="upload">
-
-                                <img id="preview" src="https://cdn-icons-png.flaticon.com/512/1829/1829586.png">
-
-                                <input type="file" id="logoInput">
-
-                            </label>
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>COURSE NAME</label>
-
-                            <input name="course" placeholder="e.g. Advanced Physic">
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>LESSON</label>
-
-                            <input name="lesson" placeholder="Module 1">
-
-                        </div>
-                        <div class="field">
-
-                            <label>BUILDING</label>
-
-                            <input name="building" placeholder="Science Hall">
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>ROOM</label>
-
-                            <input name="room" placeholder="402-B">
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>STATUS</label>
-
-                            <select name="status">
-
-                                <option>Active</option>
-                                <option>Inactive</option>
-
-                            </select>
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>TERM</label>
-
-                            <input name="term" placeholder="Fall 2024">
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>TIME</label>
-
-                            <input name="time" placeholder="10:00 AM">
-
-                        </div>
-
-
-                    </div>
-
-                </form>
-
-            </div>
-
-
-            <div class="modal-footer">
-
-                <button class="cancel">Cancel</button>
-
-                <button class="create">+ Create Class</button>
-
-            </div>
-
-
+    <div class="modal" id="opacity"> </div>
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2 id="title">Create Class</h2>
+            <div class="close">✕</div>
         </div>
 
+        <div class="modal-body">
+            <form id="classForm" enctype="multipart/form-data" action="insertcass.php" method="POST">
+                <div class="grid-form">
+                    <div class="icon-box">
+                        <!-- <label>CLASS ICON</label> -->
+                        <label class="upload">
+                            <img id="preview" src="https://cdn-icons-png.flaticon.com/512/1829/1829586.png">
+                            <input type="file" id="logoInput" name="logoInput">
+                        </label>
+                    </div>
+
+                    <input type="hidden" id="class_id" name="class_id">
+                    <input type="hidden" id="old_logo" name="old_logo">
+
+                    <div class="field">
+                        <div class="field">
+                            <label>COURSE NAME</label>
+                            <input id="course" name="course" placeholder="e.g. Advanced Physic">
+                        </div>
+                        <label style="margin-top: 5px;">LESSON</label>
+                        <input id="lesson" name="lesson" placeholder="Module 1">
+                    </div>
+                    <div class="field">
+                        <label>FLOOR</label>
+                        <input id="floor" name="floor" type="number" placeholder="1">
+                    </div>
+                    <div class="field">
+                        <label>BUILDING</label>
+                        <input id="building" name="building" placeholder="Science Hall">
+                    </div>
+                    <div class="field">
+                        <label>ROOM</label>
+                        <input id="room" name="room" placeholder="402-B">
+                    </div>
+
+                    <div class="field">
+                        <label>STATUS</label>
+                        <select id="status" name="status">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>TERM</label>
+                        <input id="term" name="term" placeholder="Fall 2024">
+                    </div>
+
+                    <div class="field">
+                        <label>TIME</label>
+                        <input id="class_time" name="class_time" type="time" placeholder="10:00 AM">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="cancel " type="reset">Cancel</button>
+                    <button class="create" type="submit">+ Create Class</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-
-
-    <script>
-        /* OPEN MODAL */
-
-        $(".add-btn").click(function() {
-
-            $("#modal").fadeIn().css("display", "flex");
-
-        });
-
-
-        /* CLOSE MODAL */
-
-        $(".close,.cancel").click(function() {
-
-            $("#modal").fadeOut();
-
-        });
-
-
-        /* DROPDOWN */
-
-        $(".menu").click(function(e) {
-
-            e.stopPropagation();
-
-            $(".dropdown").hide();
-
-            $(this).closest(".card").find(".dropdown").toggle();
-
-        });
-
-
-        $(document).click(function() {
-
-            $(".dropdown").hide();
-
-        });
-
-
-        /* IMAGE PREVIEW */
-
-        $("#logoInput").change(function() {
-
-            let file = this.files[0];
-
-            if (file) {
-
-                let reader = new FileReader();
-
-                reader.onload = function(e) {
-
-                    $("#preview").attr("src", e.target.result);
-
-                }
-
-                reader.readAsDataURL(file);
-
-            }
-
-        });
-
-
-        /* AJAX CREATE */
-
-        $(".create").click(function() {
-
-            let form = $("#classForm").serialize();
-
-            $.post("index.php", form + "&action=createClass", function(res) {
-
-                alert("Class Created");
-
-                $("#modal").fadeOut();
-
-            });
-
-        });
-    </script>
 
 </body>
 
 </html>
+
+
+
+<script>
+/* OPEN MODAL */
+
+$(".add-btn").click(function() {
+    $("#opacity").fadeIn(300).css("display", "flex");
+    $(".modal-box").fadeIn(300);
+    $("#title").text("Create Class")
+});
+
+
+/* CLOSE MODAL */
+$(".close").click(function() {
+    $("#opacity").fadeOut(300);
+    $(".modal-box").fadeOut(300);
+    $("#classForm")[0].reset();
+    $("#preview").attr("src",
+        "https://cdn-icons-png.flaticon.com/512/1829/1829586.png");
+});
+
+$("#opacity").click(function() {
+    $("#opacity").fadeOut(300);
+    $(".modal-box").fadeOut(300);
+    $("#classForm")[0].reset();
+    $("#preview").attr("src",
+        "https://cdn-icons-png.flaticon.com/512/1829/1829586.png");
+});
+
+
+/* DROPDOWN*/
+$(document).on("click", ".menu", function(e) {
+    e.stopPropagation();
+    $(".dropdown").hide();
+    $(this).closest(".card").find(".dropdown").toggle();
+
+});
+
+
+$(document).click(function() {
+    $(".dropdown").hide();
+});
+
+
+/* IMAGE PREVIEW */
+$("#logoInput").change(function() {
+    let file = this.files[0];
+    if (file) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            $("#preview").attr("src", e.target.result);
+
+        }
+        reader.readAsDataURL(file);
+
+    }
+
+});
+
+
+
+$("#classForm").submit(function(e) {
+    e.preventDefault();
+    const formdata = new FormData(this);
+    const id = $("#class_id").val();
+    const url = (id === "") ? "insertcass.php" : "updateclass.php";
+    $.ajax({
+        url: url,
+        method: "POST",
+        data: formdata,
+        contentType: false,
+        processData: false,
+        success: function(res) {
+            // console.log(res);
+            const item = JSON.parse(res);
+            if (id === "") {
+                $("#card").append(`<div class="card" 
+                    id="row-${item.id}"
+                    data-id="${item.id}"
+                    data-course="${item.course}"
+                    data-lesson="${item.lesson}" 
+                    data-status="${item.status}"
+                    data-building="${item.building}" 
+                    data-floor="${item.floor}" 
+                    data-room="${item.room}"
+                    data-term="${item.term}" 
+                    data-class_time="${item.class_time}"
+                    data-image_logo="${item.image_logo}" 
+                    data-created_at="${item.created_at}">
+
+
+                    <div class="card-header">
+                        <div class="course-box">
+                            <div class="logo">
+                                <img src="upload/${item.image_logo}">
+                            </div>
+                            <div>
+                                <div>
+                                    <p>${item.course}</p>
+                                </div>
+                                <div class="cid">${item.id}</div>
+                            </div>
+                        </div>
+                        <div class="menu">⋮</div>
+                    </div>
+
+                    <div class="dropdown">
+                        <div>Edit</div>
+                        <div class="end">End Class</div>
+                    </div>
+
+                    <div class="card-body" style="margin-top: 15px;">
+                        <div class="row"><span>Lesson</span><span>${item.lesson}</span></div>
+                        <hr>
+                        <div class="row" style="margin-top: 15px;">
+                            <span>Building</span><span>${item.building}</span>
+                        </div>
+                        <hr>
+                        <div class="row" style="margin-top: 15px;"><span>Floor</span><span>${item.floor}</span></div>
+                        <hr>
+                        <div class="row" style="margin-top: 15px;"><span>Room</span><span>${item.room}</span></div>
+                        <hr>
+                        <div class="row" style="margin-top: 15px;"><span>Status</span><span>${item.status}</span>
+                        </div>
+                        <hr>
+                        <div class="row" style="margin-top: 15px;"><span>Term</span><span>${item.term}</span></div>
+                        <hr>
+                        <div class="row" style="margin-top: 15px;"><span>Time</span><span>${item.class_time}</span></div>
+                    </div>
+                    <div class="view-btn">View Class</div>
+                </div>`);
+
+            }
+
+            $("#opacity").fadeOut(300);
+            $(".modal-box").fadeOut(300);
+            $("#classForm")[0].reset();
+            $("#preview").attr("src",
+                "https://cdn-icons-png.flaticon.com/512/1829/1829586.png");
+        }
+    })
+});
+</script>
