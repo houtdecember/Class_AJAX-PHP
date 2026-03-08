@@ -41,14 +41,14 @@ include "db.php";
                         <div>
                             <p><?= $row['course'] ?></p>
                         </div>
-                        <div class="cid"><?= $row['id'] ?></div>
+                        <div class="cid"><?= $row['id'] ?> </div>
                     </div>
                 </div>
                 <div class="menu">⋮</div>
             </div>
 
             <div class="dropdown">
-                <div>Edit</div>
+                <div class="edit">Edit</div>
                 <div class="end">End Class</div>
             </div>
 
@@ -68,13 +68,13 @@ include "db.php";
                 <hr>
                 <div class="row" style="margin-top: 15px;"><span>Term</span><span><?= $row['term'] ?></span></div>
                 <hr>
-                <div class="row" style="margin-top: 15px;"><span>Time</span><span><?= $row['class_time'] ?></span></div>
+                <div class="row" style="margin-top: 15px;"><span>Time</span><span><?= $row['class_time'] ?></span>
+                </div>
             </div>
             <div class="view-btn">View Class</div>
         </div>
         <?php endwhile; ?>
     </div>
-
 
     <!-- MODAL -->
     <div class="modal" id="opacity"> </div>
@@ -85,7 +85,7 @@ include "db.php";
         </div>
 
         <div class="modal-body">
-            <form id="classForm" enctype="multipart/form-data" action="insertcass.php" method="POST">
+            <form id="classForm" enctype="multipart/form-data">
                 <div class="grid-form">
                     <div class="icon-box">
                         <!-- <label>CLASS ICON</label> -->
@@ -152,6 +152,38 @@ include "db.php";
 
 
 <script>
+/* Edit MODAL */
+$(".edit").click(function() {
+    const card = $(this).closest(".card");
+    const id = card.data("id");
+    const course = card.data("course");
+    const lesson = card.data("lesson");
+    const building = card.data("building");
+    const floor = card.data("floor");
+    const room = card.data("room");
+    const status = card.data("status");
+    const term = card.data("term");
+    const class_time = card.data("class_time");
+    const image_logo = card.data("image_logo");
+
+    $("#class_id").val(id);
+    $("#course").val(course);
+    $("#lesson").val(lesson);
+    $("#building").val(building);
+    $("#floor").val(floor);
+    $("#room").val(room);
+    $("#status").val(status);
+    $("#term").val(term);
+    $("#class_time").val(class_time);
+    $("#old_logo").val(image_logo);
+    $("#preview").attr("src", "upload/" + image_logo);
+
+    $("#opacity").fadeIn(300).css("display", "flex");
+    $(".modal-box").fadeIn(300);
+    $("#title").text("Edit Class");
+    $(".create").text("Update Class");
+
+});
 /* OPEN MODAL */
 
 $(".add-btn").click(function() {
@@ -280,6 +312,31 @@ $("#classForm").submit(function(e) {
                     </div>
                     <div class="view-btn">View Class</div>
                 </div>`);
+
+            } else {
+
+                let card = $(`#row-${item.id}`);
+
+                card.data("course", item.course);
+                card.data("lesson", item.lesson);
+                card.data("status", item.status);
+                card.data("building", item.building);
+                card.data("floor", item.floor);
+                card.data("room", item.room);
+                card.data("term", item.term);
+                card.data("class_time", item.class_time);
+                card.data("image_logo", item.image_logo);
+
+                card.find("p").text(item.course);
+                card.find(".row:eq(0) span:eq(1)").text(item.lesson);
+                card.find(".row:eq(1) span:eq(1)").text(item.building);
+                card.find(".row:eq(2) span:eq(1)").text(item.floor);
+                card.find(".row:eq(3) span:eq(1)").text(item.room);
+                card.find(".row:eq(4) span:eq(1)").text(item.status);
+                card.find(".row:eq(5) span:eq(1)").text(item.term);
+                card.find(".row:eq(6) span:eq(1)").text(item.class_time);
+
+                card.find("img").attr("src", "upload/" + item.image_logo);
 
             }
 
