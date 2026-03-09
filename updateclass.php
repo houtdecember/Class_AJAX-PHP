@@ -54,4 +54,6 @@ if ($conn->query($sql)) {
         "class_time" => $class_time,
         "image_logo" => $image_logo
     ]);
+} else {
+    echo json_encode(['error' => $conn->error]);
 }
