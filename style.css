@@ -75,11 +75,12 @@ body {
   overflow: hidden;
 }
 
-/* .logo img {
+.logo img {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-} */
+  background-size: cover;
+}
 /* DROPDOWN */
 
 .menu {

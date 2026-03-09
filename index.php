@@ -24,53 +24,52 @@ include "db.php";
         while ($row = $result->fetch_assoc()):
         ?>
 
-        <div class="card" id="row-<?= $row['id'] ?>" data-id="<?= $row['id'] ?>" data-course="<?= $row['course'] ?>"
-            data-lesson="<?= $row['lesson'] ?>" data-status="<?= $row['status'] ?>"
-            data-building="<?= $row['building'] ?>" data-floor="<?= $row['floor'] ?>" data-room="<?= $row['room'] ?>"
-            data-term="<?= $row['term'] ?>" data-class_time="<?= $row['class_time'] ?>"
-            data-image_logo="<?= $row['image_logo'] ?>" data-created_at="<?= $row['created_at'] ?>">
-            <div class="card-header">
-                <div class="course-box">
-                    <div class="logo">
-                        <img style=" width: 42px; height: 42px; border-radius: 50%;"
-                            src="upload/<?= $row['image_logo'] ?>">
-                    </div>
-                    <div>
-                        <div>
-                            <p><?= $row['course'] ?></p>
+            <div class="card" id="row-<?= $row['id'] ?>" data-id="<?= $row['id'] ?>" data-course="<?= $row['course'] ?>"
+                data-lesson="<?= $row['lesson'] ?>" data-status="<?= $row['status'] ?>"
+                data-building="<?= $row['building'] ?>" data-floor="<?= $row['floor'] ?>" data-room="<?= $row['room'] ?>"
+                data-term="<?= $row['term'] ?>" data-class_time="<?= $row['class_time'] ?>"
+                data-image_logo="<?= $row['image_logo'] ?>" data-created_at="<?= $row['created_at'] ?>">
+                <div class="card-header">
+                    <div class="course-box">
+                        <div class="logo">
+                            <img src="upload/<?= $row['image_logo'] ?>">
                         </div>
-                        <div class="cid"><?= $row['id'] ?></div>
+                        <div>
+                            <div>
+                                <p><?= $row['course'] ?></p>
+                            </div>
+                            <div class="cid"><?= $row['id'] ?></div>
+                        </div>
+                    </div>
+                    <div class="menu">⋮</div>
+                </div>
+
+                <div class="dropdown">
+                    <div class="edit">Edit</div>
+                    <div class="delete">Delete Class</div>
+                </div>
+
+                <div class="card-body" style="margin-top: 15px;">
+                    <div class="row"><span>Lesson</span><span><?= $row['lesson'] ?></span></div>
+                    <hr>
+                    <div class="row" style="margin-top: 15px;">
+                        <span>Building</span><span><?= $row['building'] ?></span>
+                    </div>
+                    <hr>
+                    <div class="row" style="margin-top: 15px;"><span>Floor</span><span><?= $row['floor'] ?></span></div>
+                    <hr>
+                    <div class="row" style="margin-top: 15px;"><span>Room</span><span><?= $row['room'] ?></span></div>
+                    <hr>
+                    <div class="row" style="margin-top: 15px;"><span>Status</span><span><?= $row['status'] ?></span>
+                    </div>
+                    <hr>
+                    <div class="row" style="margin-top: 15px;"><span>Term</span><span><?= $row['term'] ?></span></div>
+                    <hr>
+                    <div class="row" style="margin-top: 15px;"><span>Time</span><span><?= $row['class_time'] ?></span>
                     </div>
                 </div>
-                <div class="menu">⋮</div>
+                <div class="view-btn">View Class</div>
             </div>
-
-            <div class="dropdown">
-                <div class="edit">Edit</div>
-                <div class="delete">Delete Class</div>
-            </div>
-
-            <div class="card-body" style="margin-top: 15px;">
-                <div class="row"><span>Lesson</span><span><?= $row['lesson'] ?></span></div>
-                <hr>
-                <div class="row" style="margin-top: 15px;">
-                    <span>Building</span><span><?= $row['building'] ?></span>
-                </div>
-                <hr>
-                <div class="row" style="margin-top: 15px;"><span>Floor</span><span><?= $row['floor'] ?></span></div>
-                <hr>
-                <div class="row" style="margin-top: 15px;"><span>Room</span><span><?= $row['room'] ?></span></div>
-                <hr>
-                <div class="row" style="margin-top: 15px;"><span>Status</span><span><?= $row['status'] ?></span>
-                </div>
-                <hr>
-                <div class="row" style="margin-top: 15px;"><span>Term</span><span><?= $row['term'] ?></span></div>
-                <hr>
-                <div class="row" style="margin-top: 15px;"><span>Time</span><span><?= $row['class_time'] ?></span>
-                </div>
-            </div>
-            <div class="view-btn">View Class</div>
-        </div>
         <?php endwhile; ?>
     </div>
 
@@ -84,7 +83,7 @@ include "db.php";
         </div>
 
         <div class="modal-body">
-            <form id="classForm" enctype="multipart/form-data" method="POST">
+            <form id="classForm" enctype="multipart/form-data" method="POST" novalidate>
                 <div class="grid-form">
                     <div class="icon-box">
                         <!-- <label>CLASS ICON</label> -->
@@ -151,144 +150,163 @@ include "db.php";
 
 
 <script>
-$(document).ready(function() {
-    $(".edit").click(function() {
-        const card = $(this).closest(".card");
-        const id = card.data("id");
-        const course = card.data("course");
-        const lesson = card.data("lesson");
-        const building = card.data("building");
-        const floor = card.data("floor");
-        const room = card.data("room");
-        const status = card.data("status");
-        const term = card.data("term");
-        const class_time = card.data("class_time");
-        const image_logo = card.data("image_logo");
+    $(document).ready(function() {
+        $(document).on("click", ".edit", function() {
+            const card = $(this).closest(".card");
+            const id = card.data("id");
+            const course = card.data("course");
+            const lesson = card.data("lesson");
+            const building = card.data("building");
+            const floor = card.data("floor");
+            const room = card.data("room");
+            const status = card.data("status");
+            const term = card.data("term");
+            const class_time = card.data("class_time");
+            const image_logo = card.data("image_logo");
 
-        $("#class_id").val(id);
-        $("#course").val(course);
-        $("#lesson").val(lesson);
-        $("#building").val(building);
-        $("#floor").val(floor);
-        $("#room").val(room);
-        $("#status").val(status);
-        $("#term").val(term);
-        $("#class_time").val(class_time);
-        $("#old_logo").val(image_logo);
-        $("#preview").attr("src", "upload/" + image_logo);
+            $("#class_id").val(id);
+            $("#course").val(course);
+            $("#lesson").val(lesson);
+            $("#building").val(building);
+            $("#floor").val(floor);
+            $("#room").val(room);
+            $("#status").val(status);
+            $("#term").val(term);
+            $("#class_time").val(class_time);
+            $("#old_logo").val(image_logo);
+            $("#preview").attr("src", "upload/" + image_logo);
 
-        $("#opacity").fadeIn(300).css("display", "flex");
-        $(".modal-box").fadeIn(300);
-        $("#title").text("Edit Class");
-        $(".create").text("Update Class");
+            $("#opacity").fadeIn(300).css("display", "flex");
+            $(".modal-box").fadeIn(300);
+            $("#title").text("Edit Class");
+            $(".create").text("Update Class");
 
-    });
-    /* Delete class */
-    $(document).on("click", ".delete", function() {
-        if (!confirm("Are you sure you want to delete this class?")) {
-            return;
-        }
-        const card = $(this).closest(".card");
-        const id = card.data("id");
-        const image_logo = card.data("image_logo");
-
-        $.ajax({
-            url: "deleteclass.php",
-            method: "POST",
-            data: {
-                id: id,
-                image_logo: image_logo
-            },
-            success: function(res) {
-                const response = JSON.parse(res);
-                if (response.success) {
-                    $(`#row-${id}`).remove();
-                } else {
-                    alert("Error deleting class: " + response.error);
-                }
-            }
         });
-    });
+        /* Delete class */
+        $(document).on("click", ".delete", function() {
+            if (!confirm("Are you sure you want to delete this class?")) {
+                return;
+            }
+            const card = $(this).closest(".card");
+            const id = card.data("id");
+            const image_logo = card.data("image_logo");
 
-    /* OPEN MODAL */
+            $.ajax({
+                url: "deleteclass.php",
+                method: "POST",
+                data: {
+                    id: id,
+                    image_logo: image_logo
+                },
+                success: function(res) {
+                    let response = res;
+                    try {
+                        response = JSON.parse(res);
+                    } catch (e) {
+                        // keep raw response if not JSON
+                    }
 
-    $(".add-btn").click(function() {
-        $("#opacity").fadeIn(300).css("display", "flex");
-        $(".modal-box").fadeIn(300);
-        $("#title").text("Create Class")
-    });
+                    if (response === "success" || (response && response.success)) {
+                        $(`#row-${id}`).remove();
+                    } else {
+                        const err = typeof response === "string" ? response : (response.error ||
+                            "Unknown error");
+                        alert("Error deleting class: " + err);
+                    }
+                }
+            });
+        });
+
+        /* OPEN MODAL */
+
+        $(".add-btn").click(function() {
+            // Clear any leftover edit state so it always inserts a new record
+            $("#classForm")[0].reset();
+            $("#class_id").val("");
+            $("#old_logo").val("");
+            $("#preview").attr("src", "https://cdn-icons-png.flaticon.com/512/1829/1829586.png");
+            $(".create").text("+ Create Class");
+
+            $("#opacity").fadeIn(300).css("display", "flex");
+            $(".modal-box").fadeIn(300);
+            $("#title").text("Create Class");
+        });
 
 
-    /* CLOSE MODAL */
-    $(".close").click(function() {
-        $("#opacity").fadeOut(300);
-        $(".modal-box").fadeOut(300);
-        $("#classForm")[0].reset();
-        $("#preview").attr("src",
-            "https://cdn-icons-png.flaticon.com/512/1829/1829586.png");
-    });
+        /* CLOSE MODAL */
+        $(".close").click(function() {
+            $("#opacity").fadeOut(300);
+            $(".modal-box").fadeOut(300);
+            $("#classForm")[0].reset();
+            $("#class_id").val("");
+            $("#old_logo").val("");
+            $("#preview").attr("src",
+                "https://cdn-icons-png.flaticon.com/512/1829/1829586.png");
+        });
 
-    $("#opacity").click(function() {
-        $("#opacity").fadeOut(300);
-        $(".modal-box").fadeOut(300);
-        $("#classForm")[0].reset();
-        $("#preview").attr("src",
-            "https://cdn-icons-png.flaticon.com/512/1829/1829586.png");
-    });
-
-
-    /* DROPDOWN*/
-    $(document).on("click", ".menu", function(e) {
-        e.stopPropagation();
-        $(".dropdown").hide();
-        $(this).closest(".card").find(".dropdown").toggle();
-
-    });
+        $("#opacity").click(function() {
+            $("#opacity").fadeOut(300);
+            $(".modal-box").fadeOut(300);
+            $("#classForm")[0].reset();
+            $("#class_id").val("");
+            $("#old_logo").val("");
+            $("#preview").attr("src",
+                "https://cdn-icons-png.flaticon.com/512/1829/1829586.png");
+        });
 
 
-    $(document).click(function() {
-        $(".dropdown").hide();
-    });
+        /* DROPDOWN*/
+        $(document).on("click", ".menu", function(e) {
+            e.stopPropagation();
+            $(".dropdown").hide();
+            $(this).closest(".card").find(".dropdown").toggle();
+
+        });
 
 
-    /* IMAGE PREVIEW */
-    $("#logoInput").change(function() {
-        let file = this.files[0];
-        if (file) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                $("#preview").attr("src", e.target.result);
+        $(document).click(function() {
+            $(".dropdown").hide();
+        });
+
+
+        /* IMAGE PREVIEW */
+        $("#logoInput").change(function() {
+            let file = this.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    $("#preview").attr("src", e.target.result);
+
+                }
+                reader.readAsDataURL(file);
 
             }
-            reader.readAsDataURL(file);
 
-        }
-
-    });
+        });
 
 
 
-    $("#classForm").submit(function(e) {
+        $("#classForm").submit(function(e) {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        const formdata = new FormData(this);
-        const id = $("#class_id").val();
+            const formdata = new FormData(this);
+            const id = $("#class_id").val();
 
-        const url = (id === "") ?
-            "insertcass.php" :
-            "updateclass.php";
-        $.ajax({
-            url: url,
-            method: "POST",
-            data: formdata,
-            contentType: false,
-            processData: false,
-            success: function(res) {
-                // console.log(res);
-                const item = JSON.parse(res);
-                if (id === "") {
-                    $("#card").append(`<div class="card" 
+            const url = (id === "") ?
+                "insertcass.php" :
+                "updateclass.php";
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: formdata,
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    // console.log(res);
+                    const item = JSON.parse(res);
+                    if (id === "") {
+                        $("#card").append(`<div class="card" 
                     id="row-${item.id}"
                     data-id="${item.id}"
                     data-course="${item.course}"
@@ -319,8 +337,8 @@ $(document).ready(function() {
                     </div>
 
                     <div class="dropdown">
-                        <div>Edit</div>
-                        <div class="end">End Class</div>
+                        <div class="edit">Edit</div>
+                        <div class="delete">Delete Class</div>
                     </div>
 
                     <div class="card-body" style="margin-top: 15px;">
@@ -344,40 +362,40 @@ $(document).ready(function() {
                     <div class="view-btn">View Class</div>
                 </div>`);
 
-                } else {
+                    } else {
 
-                    let card = $(`#row-${item.id}`);
+                        let card = $(`#row-${item.id}`);
 
-                    card.data("course", item.course);
-                    card.data("lesson", item.lesson);
-                    card.data("status", item.status);
-                    card.data("building", item.building);
-                    card.data("floor", item.floor);
-                    card.data("room", item.room);
-                    card.data("term", item.term);
-                    card.data("class_time", item.class_time);
-                    card.data("image_logo", item.image_logo);
+                        card.data("course", item.course);
+                        card.data("lesson", item.lesson);
+                        card.data("status", item.status);
+                        card.data("building", item.building);
+                        card.data("floor", item.floor);
+                        card.data("room", item.room);
+                        card.data("term", item.term);
+                        card.data("class_time", item.class_time);
+                        card.data("image_logo", item.image_logo);
 
-                    card.find("p").text(item.course);
-                    card.find(".row:eq(0) span:eq(1)").text(item.lesson);
-                    card.find(".row:eq(1) span:eq(1)").text(item.building);
-                    card.find(".row:eq(2) span:eq(1)").text(item.floor);
-                    card.find(".row:eq(3) span:eq(1)").text(item.room);
-                    card.find(".row:eq(4) span:eq(1)").text(item.status);
-                    card.find(".row:eq(5) span:eq(1)").text(item.term);
-                    card.find(".row:eq(6) span:eq(1)").text(item.class_time);
+                        card.find("p").text(item.course);
+                        card.find(".row:eq(0) span:eq(1)").text(item.lesson);
+                        card.find(".row:eq(1) span:eq(1)").text(item.building);
+                        card.find(".row:eq(2) span:eq(1)").text(item.floor);
+                        card.find(".row:eq(3) span:eq(1)").text(item.room);
+                        card.find(".row:eq(4) span:eq(1)").text(item.status);
+                        card.find(".row:eq(5) span:eq(1)").text(item.term);
+                        card.find(".row:eq(6) span:eq(1)").text(item.class_time);
 
-                    card.find("img").attr("src", "upload/" + item.image_logo);
+                        card.find("img").attr("src", "upload/" + item.image_logo);
 
+                    }
+
+                    $("#opacity").fadeOut(300);
+                    $(".modal-box").fadeOut(300);
+                    $("#classForm")[0].reset();
+                    $("#preview").attr("src",
+                        "https://cdn-icons-png.flaticon.com/512/1829/1829586.png");
                 }
-
-                $("#opacity").fadeOut(300);
-                $(".modal-box").fadeOut(300);
-                $("#classForm")[0].reset();
-                $("#preview").attr("src",
-                    "https://cdn-icons-png.flaticon.com/512/1829/1829586.png");
-            }
-        })
+            })
+        });
     });
-});
 </script>
